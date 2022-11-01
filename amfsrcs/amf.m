@@ -1,10 +1,12 @@
-function [dout] = amf(din,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1,rec,eps1,niter2,verb);
+function [dout] = amf(din,par)
 %  AMF: Advanced median filter (AMF) for improving the signal-to-noise ratio of seismological datasets
 %
 % By Oboue et al., 2022
 %
 % INPUT
 % din:      input data
+% par:      parameter file
+% IN par:
 % dt:       sampling
 % flo:      Low frequency in band, default is 0
 % fhi:      High frequency in band, default is Nyquist
@@ -47,6 +49,29 @@ function [dout] = amf(din,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,ep
 % OUTPUT
 % dout:     output data
 %%
+if isfield(par,'dt')
+    dt=par.dt;
+else
+    dt=0.004;
+end
+
+if isfield(par,'flo')
+    flo=par.flo;
+else
+    flo=0;
+end
+
+if isfield(par,'fhi')
+    fhi=par.fhi;
+else
+    fhi=1/dt/2;
+end
+
+nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1,rec,eps1,niter2,verb
+
+
+
+
 [d0]=amf_bandpasssosvmffkcurvelet(din,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
 % amf_bandpasssosvmffkcurvelet: robust denoising method composed of the bandpass filter, SOSVMF, FK, and the curvelet methods. 
 % This function estimates the initially denoised signal d0

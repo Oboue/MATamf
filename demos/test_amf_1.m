@@ -21,9 +21,9 @@
 %-------------------------------------------------------------------------
 clc;clear;close all;
 %% addpath
-addpath /Users/oboue/Desktop/MATamf/amf_data/
-addpath /Users/oboue/Desktop/MATamf/amfsrcs/
-addpath /Users/oboue/Desktop/MATamf/seistr/
+addpath('../amf_data/');
+addpath('../amfsrcs/');
+addpath('../seistr/');
 %% %Generate the clean synthetic data including linear events
 
 dc=amf_levents(200);
@@ -128,8 +128,10 @@ eps1=0;               % regularization parameter, default 0.0
 niter2=20;            % number of CG iterations
 verb=1;               % verbosity flag (default: 0) 
 %
+par.verb=1;
+par.dt=dt;
 tic
-d_amf=amf(din,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1,rec,eps1,niter2,verb);
+d_amf=amf(din,par);
 d5=d_amf;
 toc
 %
@@ -165,7 +167,6 @@ ylabel('Time (s)','Fontsize',12,'fontweight','bold');
 xlabel('Trace','Fontsize',12,'fontweight','bold');
 set(gca,'Linewidth',2,'Fontsize',15,'Fontweight','bold');
 
-print(gcf,'-depsc','-r300','fig1.pdf');
 print(gcf,'-depsc','-r300','fig1.eps');
 
 %% local similarity maps
@@ -192,7 +193,6 @@ caxis([0,0.5]);
 ylabel('Time (s)','Fontsize',12,'fontweight','bold');
 xlabel('Trace','Fontsize',12,'fontweight','bold');
 set(gca,'Linewidth',2,'Fontsize',15,'Fontweight','bold');
-print(gcf,'-depsc','-r300','fig2.pdf');
 print(gcf,'-depsc','-r300','fig2.eps');
 
 %% Numerical test using signal-to-noise ratio (S/N)
