@@ -35,44 +35,9 @@ clc;clear;close all;
 addpath('../amfsrcs/');
 addpath('../seistr/');
 addpath('../amf_data/');
-%%
-load('decon_xf_0.02_3_gauss2.5_src.mat');
-for n=1:length(log)
-       log(n).id = [num2str(log(n).year,'%04d'),num2str(log(n).jday,'%03d'),...
-           num2str(log(n).H,'%02d'),num2str(log(n).m,'%02d')];
-end
-eventid=unique({log.id});
-%% prepare common shot gather
-lon1 = 85.80837236+0.; 
-lat1 = 29.2673;
-lon2 = 83.87268109+0.;
-lat2 = 33.9673;
-nlatlon = 100;
-[latp,lonp] = gcwaypts(lat1,lon1,lat2,lon2,nlatlon);
-[deg0,az0]= distance(lat1,lon1,latp,lonp);
-% degree to distance
-dist0 = deg0*2*pi*6371/360;
-% for ievt=1:length(eventid)
-for ievt=10
-    disp(['Processing event# ',num2str(ievt)])
-    keep = strcmp({log.id},eventid{ievt});
-    sub=log(keep);
-    slat=[sub.slat];
-    slon=[sub.slon];
-    slatp=[];
-    slonp=[];
-    d=[];
-    for i=1:length(slat)
-        [slatp(i),slonp(i),d(i)] = amf_proj_point_to_gcp(lat1,lon1,lat2,lon2,slat(i),slon(i));
-    end
-    % calculate the distance along the profile
-    [deg0,az0]= distance(lat1,lon1,slatp,slonp);
-    dist0 = deg0*2*pi*6371/360;
-    
-    % plot original RFs
-    t=sub(1).ittax;
-%% 
-load d_z.mat
+%% load the vertical component of the receiver function 
+
+load d_z.mat 
 
 [n1,n2]=size(d_z);
 %% AMF
@@ -126,7 +91,8 @@ d_amf_z=amf(d_z,par);
 toc
 %
 
-%% 
+%% load the radial component of the receiver function
+ 
 load d_r.mat
 [n1,n2]=size(d_r);
 %% AMF
@@ -192,7 +158,6 @@ toc
         sub(n).itr1=itr';
     end
 
- 
     %% Plot figures
 
     figure('units','normalized','Position',[0.0 0.0 0.5, 1],'color','w');
@@ -318,4 +283,4 @@ annotation(gcf,'textarrow',[0.771111111111111 0.732222222222222],...
 
 
 print(gcf,'-depsc','-r300','fig16]7.eps');
-end
+% end
