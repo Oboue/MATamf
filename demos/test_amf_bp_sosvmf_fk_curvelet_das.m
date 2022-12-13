@@ -1,6 +1,6 @@
 % Demo for an advanced median filter (AMF) for improving the signal-to-noise ratio of seismological datasets
 
-% Script to plot Figure 22
+% Script to plot Figure 26
 
 %  Copyright (C) Oboue et al., 2022
 
@@ -161,7 +161,8 @@ d_amf=amf(din,par);
 toc
 %
 end
-%%
+%% Plot figures
+
 t=[0:n1]*0.004;
 x=1:n2;
 ngap=5;
@@ -171,21 +172,10 @@ d_d3=[din,zeros(n1,ngap),d_fk,zeros(n1,ngap),din-d_fk]; % FK
 d_d4=[din,zeros(n1,ngap),d_curvelet,zeros(n1,ngap),din-d_curvelet]; % Curvelet
 d_d5=[din,d_amf,zeros(n1,ngap),din-d_amf]; % AMF
 
-% Plot figures
 figure('units','normalized','Position',[0.0 0.0 0.5, 1],'color','w');
 subplot(3,2,1);amf_imagesc(d_d1,100,2,x,t);caxis([-25,25]);
 
-% subplot(3,2,1); amf_imagesc(x,t,d_d1);colormap(amf_seis);hold on
-% text(n1/-40,-0.2,'(a)','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
-% text(n2/3.5,-0.08,'Clean','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
-% text(n2/1.25,-0.08,'Raw','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
-% colormap(amf_seis);caxis([-0.6,0.6]);
-% ylabel('Time (s)','Fontsize',12,'fontweight','bold');
-% xlabel('Trace','Fontsize',12,'fontweight','bold');
-% set(gca,'Linewidth',2,'Fontsize',12,'Fontweight','bold');
-% %
-% subplot(3,2,2); imagesc(x,t,d1_d2);colormap(amf_seis);hold on
-text(n1/-20,-0.5,'(b)','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
+text(n1/-20,-0.5,'(a)','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 text(n2/5,-0.5,'Raw','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 text(n2/1.5,-0.5,'BP','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 colormap(amf_seis);;caxis([-25,25]);
@@ -193,9 +183,8 @@ ylabel('Time (s)','Fontsize',12,'fontweight','bold');
 xlabel('Trace','Fontsize',12,'fontweight','bold');
 set(gca,'Linewidth',2,'Fontsize',12,'Fontweight','bold');
 %
-% subplot(3,2,2); imagesc(x,t,d_d2);colormap(amf_seis);hold on
 subplot(3,2,2);amf_imagesc(d_d2,100,2,x,t);caxis([-25,25]);;hold on
-text(n1/-20,-0.5,'(c)','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
+text(n1/-20,-0.5,'(b)','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 text(n2/5,-0.5,'Raw','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 text(n2/1.5,-0.5,'SOSVMF','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 colormap(amf_seis);caxis([-25,25]);
@@ -203,9 +192,8 @@ ylabel('Time (s)','Fontsize',12,'fontweight','bold');
 xlabel('Trace','Fontsize',12,'fontweight','bold');
 set(gca,'Linewidth',2,'Fontsize',12,'Fontweight','bold');
 
-% subplot(3,2,3); imagesc(x,t,d_d3);colormap(amf_seis);hold on
 subplot(3,2,3);amf_imagesc(d_d3,100,2,x,t);caxis([-25,25]); hold on
-text(n1/-20,-0.5,'(d)','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
+text(n1/-20,-0.5,'(c)','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 text(n2/5,-0.5,'Raw','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 text(n2/1.5,-0.5,'FK','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 colormap(amf_seis);caxis([-25,25]);
@@ -213,9 +201,8 @@ ylabel('Time (s)','Fontsize',12,'fontweight','bold');
 xlabel('Trace','Fontsize',12,'fontweight','bold');
 set(gca,'Linewidth',2,'Fontsize',12,'Fontweight','bold');
 
-% subplot(3,2,4); imagesc(x,t,d_d4);colormap(amf_seis);hold on
 subplot(3,2,4);amf_imagesc(d_d4,100,2,x,t);caxis([-25,25]); hold on
-text(n1/-20,-0.5,'(e)','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
+text(n1/-20,-0.5,'(d)','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 text(n2/5,-0.5,'Raw','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 text(n2/1.5,-0.5,'Curvelet','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 colormap(amf_seis);caxis([-25,25]);
@@ -223,9 +210,8 @@ ylabel('Time (s)','Fontsize',12,'fontweight','bold');
 xlabel('Trace','Fontsize',12,'fontweight','bold');
 set(gca,'Linewidth',2,'Fontsize',12,'Fontweight','bold');
 
-% subplot(3,2,5); imagesc(x,t,d_d5);colormap(amf_seis);hold on
 subplot(3,2,5);amf_imagesc(d_d5,100,2,x,t);caxis([-25,25]); hold on
-text(n1/-20,-0.5,'(f)','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
+text(n1/-20,-0.5,'(e)','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 text(n2/5,-0.5,'Raw','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 text(n2/1.5,-0.5,'AMF','color','k','Fontsize',16,'fontweight','bold','HorizontalAlignment','center');
 colormap(amf_seis);caxis([-25,25]);
@@ -233,4 +219,4 @@ ylabel('Time (s)','Fontsize',12,'fontweight','bold');
 xlabel('Trace','Fontsize',12,'fontweight','bold');
 set(gca,'Linewidth',2,'Fontsize',12,'Fontweight','bold');
 
-print(gcf,'-depsc','-r300','fig22.eps');
+print(gcf,'-depsc','-r300','fig26.eps');

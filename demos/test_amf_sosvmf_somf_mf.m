@@ -1,6 +1,6 @@
 % Demo for an advanced median filter (AMF) for improving the signal-to-noise ratio of seismological datasets
 
-% Script to plot Figure 18
+% Script to plot Figure 20
 
 %  Copyright (C) Oboue et al., 2022
 
@@ -244,4 +244,4 @@ amf_imagesc(d2_z1,10,2);axis off;
 a1=axes('Parent',gcf,'Position',[0.600,0.2,0.149,0.15]);
 amf_imagesc(d2_z2,10,2);axis off;
 
-print(gcf,'-depsc','-r300','fig18.eps');
+print(gcf,'-depsc','-r300','fig20.eps');

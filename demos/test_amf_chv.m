@@ -184,13 +184,11 @@ nphi=6;    % number of poles for high cutoff
 phase=0;   % y: minimum phase, n: zero phase
 verb0=0;   % verbosity flag
 %
-% tic
-% d21=amf_bandpass(dn2,dt,flo,fhi,nplo,nphi,phase,verb0);
-% save d21.mat d21
-load d21.mat
-% toc
-% %
-% %% Denosing using the BP+SOSVMF method 
+tic
+d21=amf_bandpass(dn2,dt,flo,fhi,nplo,nphi,phase,verb0);
+toc
+%
+%% Denosing using the BP+SOSVMF method 
 % % Parameter tuning：add the key parameters of the SOSVMF method
 
 niter=2;                      % number of nonlinear iterations
@@ -217,19 +215,16 @@ ifsmooth=0;                   % 1 (if smooth) or 0 (only MF)
 tic
 d22=amf_bandpasssosvmf(dn2,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
 toc
-% save d22.mat d22
-% load d22.mat
-%% Denoising using the BP+SOSVMF+FK method 
-%  Parameter tuning：add the key parameters of the dip filter in FK domain method
-%
-w=0.2;        % half width (in percentage) of the cone filter (i.e., w*nk=nwidth)
-%
-tic
-d23=amf_bandpasssosvmffk(dn2,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w);
-toc
-% save d23.mat d23
-% load d23.mat
-%
+%% 
+% %% Denoising using the BP+SOSVMF+FK method 
+% %  Parameter tuning：add the key parameters of the dip filter in FK domain method
+% %
+% w=0.2;        % half width (in percentage) of the cone filter (i.e., w*nk=nwidth)
+% %
+% tic
+% d23=amf_bandpasssosvmffk(dn2,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w);
+% toc
+% % save d23.mat d23
 %% Denoising data using the BP+SOSVMF+FK+curvelet method 
 %  Parameter tuning：add the key parameters of the curvelet method
 
@@ -242,15 +237,13 @@ tic
 d24=amf_bandpasssosvmffkcurvelet(dn2,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
 toc
 % save d24.mat d24
-% load d24.mat
-%
 %% Denoising using the AMF method 
 %  Parameter tuning: add the key parameters for the local orthogonalization operation
 % 
 par.dt=0.0005; % sampling
 par.flo=0;     % Low frequency in band, default is 0
 par.fhi=200;   % High frequency in band, default is Nyquist
-par.nplo=6;% number of poles for low cutoff
+par.nplo=6;    % number of poles for low cutoff
 par.nphi=6;    % number of poles for high cutoff
 par.phase=0;   % y: minimum phase, n: zero phase
 par.verb0=0;   % verbosity flag
@@ -294,9 +287,7 @@ tic
 d_amf2=amf(dn2,par);
 d25=d_amf2;
 toc
-% load d_amf2.mat
-% save d_amf2.mat d_amf2
-% save d25.mat d25
+% 
 %% Plot figures
 
 dt=0.0005;
@@ -395,23 +386,23 @@ title('BP+SOSVMF','Fontsize',13,'fontweight','bold');
 set(gca,'Linewidth',2,'Fontsize',13,'Fontweight','bold');
 colormap(amf_seis);
 
+% subplot(2,4,5);
+% imagesc(h,t,d23);caxis([-0.5,0.5]);
+% ylabel('Time (s)','Fontsize',13,'fontweight','bold');
+% xlabel('Lateral distance (km)','Fontsize',13,'fontweight','bold');
+% title('BP+SOSVMF+FK','Fontsize',13,'fontweight','bold');
+% set(gca,'Linewidth',2,'Fontsize',13,'Fontweight','bold');
+% colormap(amf_seis);
+
 subplot(2,4,5);
-imagesc(h,t,d23);caxis([-0.5,0.5]);
-ylabel('Time (s)','Fontsize',13,'fontweight','bold');
+imagesc(h,t,d24);caxis([-0.5,0.5]);
+ylabel('Time (s)','Fontsize',10,'fontweight','bold');
 xlabel('Lateral distance (km)','Fontsize',13,'fontweight','bold');
-title('BP+SOSVMF+FK','Fontsize',13,'fontweight','bold');
+title('BP+SOSVMF+Curvelet','Fontsize',13,'fontweight','bold');
 set(gca,'Linewidth',2,'Fontsize',13,'Fontweight','bold');
 colormap(amf_seis);
 
 subplot(2,4,6);
-imagesc(h,t,d24);caxis([-0.5,0.5]);
-ylabel('Time (s)','Fontsize',10,'fontweight','bold');
-xlabel('Lateral distance (km)','Fontsize',13,'fontweight','bold');
-title('BP+SOSVMF+FK+Curvelet','Fontsize',13,'fontweight','bold');
-set(gca,'Linewidth',2,'Fontsize',13,'Fontweight','bold');
-colormap(amf_seis);
-
-subplot(2,4,7);
 imagesc(h,t,d25);caxis([-0.5,0.5]);
 ylabel('Time (s)','Fontsize',13,'fontweight','bold');
 xlabel('Lateral distance (km)','Fontsize',13,'fontweight','bold');
@@ -436,7 +427,7 @@ amf_snr(d,d_amf)  % AMF
 amf_snr(d,dn2) % Noisy
 amf_snr(d,d21) % BP
 amf_snr(d,d22) % BP+SOSVMF
-amf_snr(d,d23) %Bp+SOSVMF+Curvelet
+% amf_snr(d,d23) %Bp+SOSVMF+Curvelet
 amf_snr(d,d24) % BP+SOSVMF+Curvelet+FK
 amf_snr(d,d_amf2) % AMF
 
