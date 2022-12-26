@@ -65,7 +65,7 @@ phase=0;   % y: minimum phase, n: zero phase
 verb0=0;   % verbosity flag
 %
 tic
-d1l=amf_bandpass(dinl,dt,flo,fhi,nplo,nphi,phase,verb0);
+d1l=amf_bp(dinl,dt,flo,fhi,nplo,nphi,phase,verb0);
 toc
 %
 %% Denosing using the BP+SOSVMF method 
@@ -94,7 +94,7 @@ ifsmooth=0;                   % 1 (if smooth) or 0 (only MF)
 
 %                                                                                                            
 tic
-d2l=amf_bandpasssosvmf(dinl,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
+d2l=amf_bpsosvmf(dinl,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
 toc
 % 
 %% Denoising using the BP+SOSVMF+FK method 
@@ -104,7 +104,7 @@ w=0; % half width (in percentage) of the cone filter (i.e., w*nk=nwidth)
 
 % 
 tic
-d3l = amf_bandpasssosvmffk(dinl,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w);
+d3l = amf_bpsosvmffk(dinl,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w);
 toc
 %
 %% Denoising data using the BP+SOSVMF+FK+curvelet method 
@@ -116,7 +116,7 @@ c3=0.9;              % Thresholding parameter (alpha)
 niter1=10;           % Number of iteration
 % 
 tic
-d4l=amf_bandpasssosvmffkcurvelet(dinl,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
+d4l=amf_bpsosvmffkct(dinl,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
 toc
 %
 %% AMF
@@ -210,7 +210,7 @@ verb0=0;   % verbosity flag
 
 %
 tic
-d1=amf_bandpass(din,dt,flo,fhi,nplo,nphi,phase,verb0);
+d1=amf_bp(din,dt,flo,fhi,nplo,nphi,phase,verb0);
 toc
 %
 %% Denosing using the BP+SOSVMF method 
@@ -239,7 +239,7 @@ ifsmooth=0;                   % 1 (if smooth) or 0 (only MF)
 
 %                                                                                                             
 tic
-d2=amf_bandpasssosvmf(din,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
+d2=amf_bpsosvmf(din,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
 toc
 %
 %% Denoising using the BP+SOSVMF+FK method 
@@ -249,7 +249,7 @@ w=0; % half width (in percentage) of the cone filter (i.e., w*nk=nwidth)
 
 %
 tic
-d3=amf_bandpasssosvmffk(din,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w);
+d3=amf_bpsosvmffk(din,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w);
 toc
 %
 %% Denoising data using the BP+SOSVMF+FK+curvelet method 
@@ -262,7 +262,7 @@ niter1=10;           % Number of iteration
 
 % 
 tic
-d4=amf_bandpasssosvmffkcurvelet(din,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
+d4=amf_bpsosvmffkct(din,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
 toc
 %
 %% Denoising using the AMF method 

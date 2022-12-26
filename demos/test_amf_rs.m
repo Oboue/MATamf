@@ -46,7 +46,7 @@ phase=0;   % y: minimum phase, n: zero phase
 verb0=0;   % verbosity flag
 %
 tic
-d1_bp1=amf_bandpass(din1,dt,flo,fhi,nplo,nphi,phase,verb0);
+d1_bp1=amf_bp(din1,dt,flo,fhi,nplo,nphi,phase,verb0);
 toc
 %
 %% Denosing using the BP+SOSVMF method 
@@ -75,7 +75,7 @@ ifsmooth=0;                   % 1 (if smooth) or 0 (only MF)
 
 %
 tic
-d1_bpsosvmf1=amf_bandpasssosvmf(din1,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
+d1_bpsosvmf1=amf_bpsosvmf(din1,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
 toc
 %
 
@@ -85,7 +85,7 @@ toc
 w=0.00;   % half width (in percentage) of the cone filter (i.e., w*nk=nwidth)
 %
 tic
-d1_bpsosvmffk1=amf_bandpasssosvmffk(din1,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w);
+d1_bpsosvmffk1=amf_bpsosvmffk(din1,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w);
 toc
 %
 %% Denoising data using the BP+SOSVMF+FK+curvelet method 
@@ -97,7 +97,7 @@ c3=0.5;               % Thresholding parameter (alpha)
 niter1=10;           % Number of iteration
 % 
 tic
-d1_bpsosvmffkcurvelet1=amf_bandpasssosvmffkcurvelet(din1,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
+d1_bpsosvmffkct1=amf_bpsosvmffkct(din1,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
 toc
 %
 %% Denoising using the AMF method 
@@ -159,14 +159,14 @@ x=1:n2;
 ngap=10;
 ngap0=250;
 d1_11=[din1,zeros(n1,ngap),d1_bp1,din1-d1_bp1,zeros(n1,ngap),d1_bpsosvmf1,din1-d1_bpsosvmf1];
-d1_21=[d1_bpsosvmffkcurvelet1,d1_bpsosvmffkcurvelet1-din1,zeros(n1,ngap),d1_amf1,din1-d1_amf1];
+d1_21=[d1_bpsosvmffkct1,d1_bpsosvmffkct1-din1,zeros(n1,ngap),d1_amf1,din1-d1_amf1];
 %% local similarity maps
 
 rect=[10,10,1];niter=20;eps=0;verb=0;
 [simid11]=amf_localsimi(din1-d1_bp1,d1_bp1,rect,niter,eps,verb);
 [simid12]=amf_localsimi(din1-d1_bpsosvmf1,d1_bpsosvmf1,rect,niter,eps,verb);
 % [simid13]=amf_localsimi(din1-d1_bpsosvmffk,d1_bpsosvmffk,rect,niter,eps,verb);
-[simid14]=amf_localsimi(din1-d1_bpsosvmffkcurvelet1,d1_bpsosvmffkcurvelet1,rect,niter,eps,verb);
+[simid14]=amf_localsimi(din1-d1_bpsosvmffkct1,d1_bpsosvmffkct1,rect,niter,eps,verb);
 [simid15]=amf_localsimi(din1-d1_amf1,d1_amf1,rect,niter,eps,verb);
 d1_sim1=[simid11,zeros(n1,ngap),simid12,zeros(n1,ngap),simid14,zeros(n1,ngap),simid15];
 %% read field reflection seismic data 2
@@ -189,7 +189,7 @@ phase=0;   % y: minimum phase, n: zero phase
 verb0=0;   % verbosity flag
 %
 tic
-d2_bp=amf_bandpass(din2,dt,flo,fhi,nplo,nphi,phase,verb0);
+d2_bp=amf_bp(din2,dt,flo,fhi,nplo,nphi,phase,verb0);
 toc
 %
 %% Denosing using the BP+SOSVMF method 
@@ -217,7 +217,7 @@ type_mf=1;                    % 0 (MF) or 1 (SVMF)
 ifsmooth=0;                   % 1 (if smooth) or 0 (only MF)
 %                                                                                                             0,0,dipn,[],n1,n2,ns,2,0.01,n1*n2,n1*n2,type_mf,ifsmooth,d1,[]
 tic
-d2_bpsosvmf=amf_bandpasssosvmf(din2,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
+d2_bpsosvmf=amf_bpsosvmf(din2,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
 toc
 % 
 %% Denoising using the BP+SOSVMF+FK method 
@@ -226,7 +226,7 @@ toc
 w=0.00;   % half width (in percentage) of the cone filter (i.e., w*nk=nwidth)
 % 
 tic
-d2_bpsosvmffk=amf_bandpasssosvmffk(din2,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w);
+d2_bpsosvmffk=amf_bpsosvmffk(din2,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w);
 toc
 %
 %% Denoising data using the BP+SOSVMF+FK+curvelet method 
@@ -238,7 +238,7 @@ c3=0.5;               % Thresholding parameter (alpha)
 niter1=10;           % Number of iteration
 % 
 tic
-d2_bpsosvmffkcurvelet=amf_bandpasssosvmffkcurvelet(din2,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
+d2_bpsosvmffkct=amf_bpsosvmffkct(din2,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
 toc
 %
 %% Denoising using the AMF method 
@@ -280,7 +280,7 @@ par.c2=c2;                      % Chooses one of two possibilities for the coeff
 par.c3=c3;                      % Thresholding parameter (alpha)
 par.niter1=niter1;              % Number of iteration
 %
-rec = zeros(3, 1);    % 3-D vector denoting smooth radius 
+rec = zeros(3, 1);              % 3-D vector denoting smooth radius 
 par.rec(1) = 10;
 par.rec(2) = 10;
 par.rec(3) = 1;
@@ -296,13 +296,13 @@ x=1:n2;
 ngap=5;
 ngap0=250;
 d2_1=[din2,zeros(n1,ngap),d2_bp,din2-d2_bp,zeros(n1,ngap),d2_bpsosvmf,din2-d2_bpsosvmf];
-d2_2=[d2_bpsosvmffkcurvelet,din2-d2_bpsosvmffkcurvelet,zeros(n1,ngap),d2_amf,din2-d2_amf];
+d2_2=[d2_bpsosvmffkct,din2-d2_bpsosvmffkct,zeros(n1,ngap),d2_amf,din2-d2_amf];
 %% local similarity maps
 rect=[10,10,1];niter=20;eps=0;verb=0;
 [simid21]=amf_localsimi(din2-d2_bp,d2_bp,rect,niter,eps,verb);
 [simid22]=amf_localsimi(din2-d2_bpsosvmf,d2_bpsosvmf,rect,niter,eps,verb);
 %[simid23]=amf_localsimi(din2-d2_bpsosvmffk,d2_bpsosvmffk,rect,niter,eps,verb);
-[simid24]=amf_localsimi(din2-d2_bpsosvmffkcurvelet,d2_bpsosvmffkcurvelet,rect,niter,eps,verb);
+[simid24]=amf_localsimi(din2-d2_bpsosvmffkct,d2_bpsosvmffkct,rect,niter,eps,verb);
 [simid25]=amf_localsimi(din2-d2_amf,d2_amf,rect,niter,eps,verb);
 d_sim2=[simid21,zeros(n1,ngap),simid22,zeros(n1,ngap),simid24,zeros(n1,ngap),simid25];
 %% Plot figures/ first field data
