@@ -258,15 +258,15 @@ else
 end
 
 
-[d0]=amf_bandpasssosvmffkcurvelet(din,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
-% amf_bandpasssosvmffkcurvelet: robust denoising method composed of the bandpass filter, SOSVMF, FK, and the curvelet methods. 
+[d0]=amf_bpsosvmffkct(din,dt,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
+% amf_bpsosvmffkct: robust denoising method composed of the bandpass filter, SOSVMF, FK, and the curvelet methods. 
 % This function estimates the initially denoised signal d0
 
 %% Local orthogonalization operation 
  nois_0=din-d0; % compute the initial noise section
-[dout,nois2,low]=amf_localortho(d0,nois_0,rec,niter2,eps1,verb);
+[dout,nois2,low]=amf_lo(d0,nois_0,rec,niter2,eps1,verb);
 
-% amf_localortho: amf_localortho compensates for the signal leakage energy
-% causes by ''amf_bandpasssosvmffkcurvelet'' method.
+% amf_lo: amf_lo compensates for the signal leakage energy
+% causes by ''amf_bpsosvmffkct'' method.
 % dout is the final result from the AMF method.
 return
