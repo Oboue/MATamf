@@ -1,5 +1,6 @@
 # MATamf
-MATamf is a Matlab package for  the advanced median filter (AMF) for improving the signal-to-noise ratio of seismological datasets.
+MATamf is a Matlab package for  the advanced median filter (AMF) for improving the signal-to-noise ratio of seismological datasets. The MaATamf package has a variety of applications exploration and earthquake seismology.
+
 
 Copyright (C) Oboue et al., 2022
 
