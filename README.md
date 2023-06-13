@@ -15,6 +15,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details: http://www.gnu.org/licenses/
 
 
+# Description of the twelve testing scripts
+
 test_amf_synlcre.m This script demonstrates the denoising performance on 2D synthetic seismic data containing linear and curved events corrupted by random and strong erratic noise. 
 
 test_amf_rs.m This script demonstrates the denoising performance on pre-stack and post-stack 2D real reflection seismic data contaminated by erratic and random noise. 
@@ -37,8 +39,7 @@ test_amf_bp_sosvmf_ct_drr_rf.m This script demonstrates the denoising performanc
 
 test_amf_bp_sosvmf_ct_drr_ssp.m This script demonstrates the denoising performance of different methods on 2D SS precursor data.
 
-test_amf_bp_sosvmf_fk_ct_drr_das.m This script demonstrates the denoising performance of different methods on 2D raw data recorded on DAS.
-
+test_amf_bp_sosvmf_fk_ct_drr_das.m This script demonstrates the denoising perf
 
 
 
