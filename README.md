@@ -40,6 +40,7 @@ Chen, Y., S. Zu, Y. Wang, and X. Chen, 2020, Deblending of simultaneous-source d
 
 Zhao, Q., Q. Du, X. Gong, and Y. Chen, 2018, Signal-preserving erratic noise attenuation via iterative robust sparsity-promoting filter, IEEE Transactions on Geoscience and Remote Sensing, 56, 1558-0644.
 
+# Licence
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published
