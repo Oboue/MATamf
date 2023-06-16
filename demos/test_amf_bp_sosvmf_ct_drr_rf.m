@@ -1,6 +1,6 @@
 % Demo for an advanced median filter (AMF) for improving the signal-to-noise ratio of seismological datasets
 
-% Script to plot Figures 9 and 10
+% Script to plot Figure 17
 
 %  Copyright (C) Oboue et al., 2022
 
@@ -35,7 +35,7 @@ clc;clear;close all;
 addpath('../amfsrcs/');
 addpath('../seistr/');
 addpath('../amf_data/');
-%% load the vertical component of the receiver function 
+%% load the vertical and radial components of the receiver function 
 
 load d_z.mat % vertical component 
 
@@ -72,7 +72,7 @@ tol_cg=0.000001;              % tol_cg: tolerence for CG (default: 0.000001)
 rect(1)=200;                   % rect:  smoothing radius (ndim*1)
 rect(2)=200;                   % "      "        "
 rect(3)=1;                    % "      "        "
-verb1=1;                      % verbosity flag
+verb=1;                      % verbosity flag
 
 adj=0;                        % adjoint flag
 add=0;                        % adding flag
@@ -86,7 +86,7 @@ ifsmooth=0;                   % 1 (if smooth) or 0 (only MF)
 
 %
 tic
-d_bpsosvmf_z=amf_bpsosvmf(d_z,t,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
+d_sosvmf_z=amf_sosvmf(d_z,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
 toc
 %
 
@@ -112,72 +112,31 @@ type_mf=1;                    % 0 (MF) or 1 (SVMF)
 ifsmooth=0;                   % 1 (if smooth) or 0 (only MF)
 
 tic
-d_bpsosvmf_r=amf_bpsosvmf(d_r,t,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
+d_sosvmf_r=amf_sosvmf(d_r,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth);
 toc
 %
-%% Denosing using the BP+SOSVMF method 
-% Parameter tuning：add the key parameters of the SOSVMF method
+%% Denoising using curvelet method
 
-niter=5;                      % number of nonlinear iterations
-liter=20;                     % liter: number of linear iterations (in divn)
-order1=2;                     % order: accuracy order
-eps_dv=0.01;                  % eps_dv: eps for divn  (default: 0.01)
-eps_cg=1;                     % eps_cg: eps for CG    (default: 1)
-tol_cg=0.000001;              % tol_cg: tolerence for CG (default: 0.000001)
-rect(1)=200;                   % rect:  smoothing radius (ndim*1)
-rect(2)=200;                   % "      "        "
-rect(3)=1;                    % "      "        "
-verb1=1;                      % verbosity flag
-
-adj=0;                        % adjoint flag
-add=0;                        % adding flag
-ns=2;                         % spray radius
-order2=2;                     % PWD order
-eps=0.01;                     % regularization (default:0.01);
-ndn=n1*n2;                    % size of dn (n1*n2)
-nds=n1*n2;                    % size of ds (n1*n2)
-type_mf=1;                    % 0 (MF) or 1 (SVMF)
-ifsmooth=0;                   % 1 (if smooth) or 0 (only MF)
+d_est=d_z;
 
 c1=1;                % Type of the transform(0: complex-valued curvelets,1: real-valued curvelets)
 c2=2;                % Chooses one of two possibilities for the coefficients at the finest level(1: curvelets,2: wavelets)
-c3=500;               % Thresholding parameter (alpha)
+c3=500;                % Thresholding parameter (alpha)
 niter1=10;           % Number of iteration
 
-w=0.0;
-% 
 tic
-d_bpsosvmffkct_z=amf_bpsosvmffkct(d_z,t,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
+d_ct_z=amf_ct(d_z,d_est,n1,n2,c1,c2,c3,niter1);
 toc
 
-niter=5;                      % number of nonlinear iterations
-liter=20;                     % liter: number of linear iterations (in divn)
-order1=2;                     % order: accuracy order
-eps_dv=0.01;                  % eps_dv: eps for divn  (default: 0.01)
-eps_cg=1;                     % eps_cg: eps for CG    (default: 1)
-tol_cg=0.000001;              % tol_cg: tolerence for CG (default: 0.000001)
-rect(1)=1000;                   % rect:  smoothing radius (ndim*1)
-rect(2)=1000;                   % "      "        "
-rect(3)=1;                    % "      "        "
-verb1=1;                      % verbosity flag
-
-adj=0;                        % adjoint flag
-add=0;                        % adding flag
-ns=4;                         % spray radius
-order2=2;                     % PWD order
-eps=0.01;                     % regularization (default:0.01);
-ndn=n1*n2;                    % size of dn (n1*n2)
-nds=n1*n2;                    % size of ds (n1*n2)
-type_mf=1;                    % 0 (MF) or 1 (SVMF)
-ifsmooth=0;                   % 1 (if smooth) or 0 (only MF)
-
 c1=1;                % Type of the transform(0: complex-valued curvelets,1: real-valued curvelets)
 c2=2;                % Chooses one of two possibilities for the coefficients at the finest level(1: curvelets,2: wavelets)
-c3=500;               % Thresholding parameter (alpha)
+c3=500;                % Thresholding parameter (alpha)
 niter1=10;           % Number of iteration
-% 
+
+d_est=d_r;
+
 tic
-d_bpsosvmffkct_r=amf_bpsosvmffkct(d_r,t,flo,fhi,nplo,nphi,phase,verb0,niter,liter,order1,eps_dv,eps_cg,tol_cg,rect,verb1,adj,add,n1,n2,ns,order2,eps,ndn,nds,type_mf,ifsmooth,w,c1,c2,c3,niter1);
+d_ct_r=amf_ct(d_r,d_est,n1,n2,c1,c2,c3,niter1);
 toc
 %% AMF
 % dt=0.0005; % sampling
@@ -283,6 +242,24 @@ par.verb=1;              % verbosity flag (default: 0)
 tic
 d_amf_r=amf(d_r,par);
 toc
+
+%% Noise attenuation using drr method
+flow=0;
+fhigh=250;
+dtime=0.004; 
+N=8;% rank
+K=2;% damping factor
+verb=0;
+
+tic
+dz_drr=amf_fxydrr(d_z,flow,fhigh,dtime,N,K,verb);    
+toc
+% dnz_drr=d_z-dz_drr;
+
+tic
+dr_drr=amf_fxydrr(d_r,flow,fhigh,dt,N,K,verb);    
+toc
+% dnr_drr=d_r-dr_drr;
 %%
 % deconvolution
 % raw data
@@ -300,7 +277,6 @@ toc
         sub(n).itr=itr';
     end
     
-    
  % BP 
 
     for n=1:size(d_bp_r,2)
@@ -310,22 +286,22 @@ toc
         sub(n).itrbp=itr';
     end
     
-% BP+SOSVMF
+% SOSVMF
 
-    for n=1:size(d_bpsosvmf_r,2)
-        R=d_bpsosvmf_r(:,n);
-        Z=d_bpsosvmf_z(:,n);
+    for n=1:size(d_sosvmf_r,2)
+        R=d_sosvmf_r(:,n);
+        Z=d_sosvmf_z(:,n);
         [itr,itrms] = amf_makeRFitdecon_la_norm(R,Z,dt,nt,ph,gauss,itmax,minderr);
         sub(n).itrbpsosvmf=itr';
     end
 
-% BP+SOSVMF+Curvelet
+% Curvelet
 
-    for n=1:size(d_bpsosvmffkct_r,2)
-        R=d_bpsosvmffkct_r(:,n);
-        Z=d_bpsosvmffkct_z(:,n);
+    for n=1:size(d_ct_r,2)
+        R=d_ct_r(:,n);
+        Z=d_ct_z(:,n);
         [itr,itrms] = amf_makeRFitdecon_la_norm(R,Z,dt,nt,ph,gauss,itmax,minderr);
-        sub(n).itrbpsosvmfct=itr';
+        sub(n).itrct=itr';
     end
     
 % AMF
@@ -335,6 +311,14 @@ toc
         Z=d_amf_z(:,n);
         [itr,itrms] = amf_makeRFitdecon_la_norm(R,Z,dt,nt,ph,gauss,itmax,minderr);
         sub(n).itramf=itr';
+    end
+
+% drr
+    for n=1:size(dr_drr,2)
+        R=dr_drr(:,n);
+        Z=dz_drr(:,n);
+        [itr,itrms] = amf_makeRFitdecon_la_norm(R,Z,dt,nt,ph,gauss,itmax,minderr);
+        sub(n).itrdrr=itr';
     end
     %% Plot figures
     
@@ -474,11 +458,11 @@ annotation(gcf,'textarrow',[0.795555555555555 0.764444444444444],...
     text(-0.15,0.98,'(a)','Units','normalized','FontSize',16)
     title('Vertical (raw)')
     subplot(3,2,2)
-    amf_wigb(d_bpsosvmf_z,2,h,t)
+    amf_wigb(d_sosvmf_z,2,h,t)
     xlabel('Distance (km)')
     ylabel('Time (s)')
     set(gca,'fontsize',16)
-    title('Vertical (BP+SOSVMF)')
+    title('Vertical (SOSVMF)')
     text(-0.15,0.98,'(b)','Units','normalized','FontSize',18)
     annotation(gcf,'arrow',[0.228888888888889 0.265555555555556],...
     [0.921052631578948 0.903846153846154],'Color',[1 0 0],'LineWidth',3,...
@@ -497,11 +481,11 @@ annotation(gcf,'textarrow',[0.795555555555555 0.764444444444444],...
     text(-0.15,0.98,'(c)','Units','normalized','FontSize',18)
     title('Radial (raw)')
     subplot(3,2,4)
-    amf_wigb(d_bpsosvmf_r,2,h,t)
+    amf_wigb(d_sosvmf_r,2,h,t)
     xlabel('Distance (km)')
     ylabel('Time (s)')
     set(gca,'fontsize',16)
-    title('Radial (BP+SOSVMF)')
+    title('Radial (SOSVMF)')
     text(-0.15,0.98,'(d)','Units','normalized','FontSize',18)     
     annotation(gcf,'arrow',[0.677777777777778 0.714444444444445],...
     [0.919028340080972 0.901821862348179],'Color',[1 0 0],'LineWidth',3,...
@@ -558,7 +542,7 @@ annotation(gcf,'arrow',[0.884444444444444 0.851111111111111],...
     ylabel('Time (s)')
     ylim([-5 30])
     set(gca,'fontsize',16)
-    title('RF (BP+SOSVMF)')
+    title('RF (SOSVMF)')
     text(-0.15,0.98,'(f)','Units','normalized','FontSize',18)
     annotation(gcf,'textarrow',[0.357777777777778 0.318888888888889],...
     [0.204465587044535 0.232793522267206],'Color',[1 0 0],'TextColor',[1 0 0],...
@@ -599,11 +583,11 @@ annotation(gcf,'textarrow',[0.795555555555555 0.764444444444444],...
     text(-0.15,0.98,'(a)','Units','normalized','FontSize',20)
     title('Vertical (raw)')
     subplot(3,2,2)
-    amf_wigb(d_bpsosvmffkct_z,2,h,t)
+    amf_wigb(d_ct_z,2,h,t)
     xlabel('Distance (km)')
     ylabel('Time (s)')
     set(gca,'fontsize',16)
-    title('Vertical (BP+SOSVMF+Curvelet)')
+    title('Vertical (Curvelet)')
     text(-0.15,0.98,'(b)','Units','normalized','FontSize',20)
     annotation(gcf,'arrow',[0.228888888888889 0.265555555555556],...
     [0.921052631578948 0.903846153846154],'Color',[1 0 0],'LineWidth',3,...
@@ -622,11 +606,11 @@ annotation(gcf,'textarrow',[0.795555555555555 0.764444444444444],...
     text(-0.15,0.98,'(c)','Units','normalized','FontSize',20)
     title('Radial (raw)')
     subplot(3,2,4)
-    amf_wigb(d_bpsosvmffkct_r,2,h,t)
+    amf_wigb(d_ct_r,2,h,t)
     xlabel('Distance (km)')
     ylabel('Time (s)')
     set(gca,'fontsize',16)
-    title('Radial (BP+SOSVMF+Curvelet)')
+    title('Radial (Curvelet')
     text(-0.15,0.98,'(d)','Units','normalized','FontSize',18)     
     annotation(gcf,'arrow',[0.677777777777778 0.714444444444445],...
     [0.919028340080972 0.901821862348179],'Color',[1 0 0],'LineWidth',3,...
@@ -676,14 +660,14 @@ annotation(gcf,'arrow',[0.884444444444444 0.851111111111111],...
     ylim([-5 30])
     set(gca,'fontsize',16)
     text(-0.15,0.98,'(e)','Units','normalized','FontSize',20)
-    title('RF (raw)')
+    title('RF (Raw)')
    subplot(3,2,6)
-    amf_wigb([sub.itrbpsosvmfct],4,h,t)
+    amf_wigb([sub.itrct],4,h,t)
     xlabel('Distance (km)')
     ylabel('Time (s)')
     ylim([-5 30])
     set(gca,'fontsize',16)
-    title('RF (BP+SOSVMF+Curvelet)')
+    title('RF (Curvelet)')
     text(-0.15,0.98,'(f)','Units','normalized','FontSize',20)
     annotation(gcf,'textarrow',[0.357777777777778 0.318888888888889],...
     [0.204465587044535 0.232793522267206],'Color',[1 0 0],'TextColor',[1 0 0],...
@@ -711,7 +695,7 @@ annotation(gcf,'textarrow',[0.795555555555555 0.764444444444444],...
     'FontName','Helvetica Neue');   
   %%  
 % AMF
-figure('units','normalized','Position',[0.0 0.0 0.5, 1],'color','w');
+    figure('units','normalized','Position',[0.0 0.0 0.5, 1],'color','w');
 
     subplot(3,2,1)
     amf_wigb(d_z,2,h,t)
@@ -832,7 +816,6 @@ annotation(gcf,'textarrow',[0.771111111111111 0.732222222222222],...
     'FontSize',18,...
     'FontName','Helvetica Neue');
 
-print(gcf,'-depsc','-r300','fig9.eps');
 %% plot receiver functions data together
     
 figure('units','normalized','Position',[0.0 0.0 0.5, 1],'color','w');
@@ -851,18 +834,16 @@ set(gca,'Linewidth',2,'Fontsize',16,'Fontweight','bold');
     text(-0.2,1.05,'(a)','Units','normalized','FontSize',25);
 ylabel('Time (s)','Fontsize',16,'fontweight','bold');
 xlabel('Distance (km)','Fontsize',16,'fontweight','bold');
-annotation(gcf,'textarrow',[0.241111111111111 0.221111111111111],...
-    [0.788832487309646 0.808418792001484],'Color',[1 0 0],'TextColor',[1 0 0],...
-    'TextBackgroundColor',[1 1 1],...
-    'String',{'Strong','erratic','noise'},...
+annotation(gcf,'textarrow',[0.244444444444444 0.22],...
+    [0.769582234016841 0.814589665653496],'Color',[1 0 0],'TextColor',[1 0 0],...
+    'String',{'Strong erratic noise'},...
     'LineWidth',3,...
     'HeadWidth',25,...
     'FontWeight','bold',...
     'FontSize',18,...
     'FontName','Helvetica Neue');
-annotation(gcf,'textarrow',[0.313333333333333 0.295555555555555],...
-    [0.806091370558376 0.83379950266138],'Color',[1 0 0],'TextColor',[1 0 0],...
-    'TextBackgroundColor',[1 1 1],...
+annotation(gcf,'textarrow',[0.307777777777777 0.289999999999999],...
+    [0.806091370558378 0.833799502661382],'Color',[1 0 0],'TextColor',[1 0 0],...
     'String',{'Moho'},...
     'LineWidth',3,...
     'HeadWidth',25,...
@@ -910,7 +891,7 @@ annotation(gcf,'textarrow',[0.757777777777778 0.737777777777778],...
     colormap(amf_seis);
     caxis([-0.4 0.4])
 set(gca,'Linewidth',2,'Fontsize',16,'Fontweight','bold');
-    title('RF (BP+SOSVMF)')
+    title('RF (SOSVMF)')
     ylim([-5 30])
     text(-0.2,1.05,'(c)','Units','normalized','FontSize',25)
 ylabel('Time (s)','Fontsize',16,'fontweight','bold');
@@ -933,11 +914,11 @@ annotation(gcf,'textarrow',[0.304444444444444 0.286666666666666],...
     'FontName','Helvetica Neue');
 
     subplot(3,2,4)
-    imagesc(dist0,t,[sub.itrbpsosvmfct]);
+    imagesc(dist0,t,[sub.itrct]);
     colormap(amf_seis);
     caxis([-0.4 0.4])
 set(gca,'Linewidth',2,'Fontsize',16,'Fontweight','bold');
-    title('RF (BP+SOSVMF+Curvelet)')
+    title('RF (Curvelet)')
     ylim([-5 30])
     text(-0.2,1.05,'(d)','Units','normalized','FontSize',25)
 ylabel('Time (s)','Fontsize',16,'fontweight','bold');
@@ -971,7 +952,7 @@ ylabel('Time (s)','Fontsize',16,'fontweight','bold');
 xlabel('Distance (km)','Fontsize',16,'fontweight','bold');
 annotation(gcf,'textarrow',[0.29 0.272222222222222],...
     [0.201015228426396 0.236845187940569],'Color',[1 0 0],'TextColor',[1 0 0],...
-    'String',{'Improved','signal','energy  of Moho'},...
+    'String',{'Improved signal','energy  of Moho'},...
     'LineWidth',3,...
     'HeadWidth',25,...
     'FontWeight','bold',...
@@ -986,4 +967,58 @@ annotation(gcf,'textarrow',[0.437777777777778 0.42],...
     'FontSize',18,...
     'FontName','Helvetica Neue');
 
-print(gcf,'-depsc','-r300','fig10.eps');
+ subplot(3,2,6)
+    imagesc(dist0,t,[sub.itrdrr]);
+    colormap(amf_seis);
+    caxis([-0.4 0.4])
+set(gca,'Linewidth',2,'Fontsize',16,'Fontweight','bold');
+    title('RF (DRR)')
+    ylim([-5 30])
+    text(-0.2,1.05,'(f)','Units','normalized','FontSize',25)
+ylabel('Time (s)','Fontsize',16,'fontweight','bold');
+xlabel('Distance (km)','Fontsize',16,'fontweight','bold');
+annotation(gcf,'textarrow',[0.29 0.272222222222222],...
+    [0.201015228426396 0.236845187940569],'Color',[1 0 0],'TextColor',[1 0 0],...
+    'String',{'Improved signal','energy  of Moho'},...
+    'LineWidth',3,...
+    'HeadWidth',25,...
+    'FontWeight','bold',...
+    'FontSize',18,...
+    'FontName','Helvetica Neue');
+annotation(gcf,'textarrow',[0.437777777777778 0.42],...
+    [0.2 0.235829959514173],'Color',[1 0 0],'TextColor',[1 0 0],...
+    'TextBackgroundColor',[1 1 1],...
+    'LineWidth',3,...
+    'HeadWidth',25,...
+    'FontWeight','bold',...
+    'FontSize',18,...
+    'FontName','Helvetica Neue');
+annotation(gcf,'textarrow',[0.693333333333333 0.662222222222222],...
+    [0.199214916584887 0.225035062556371],'Color',[1 0 0],'TextColor',[1 0 0],...
+    'TextBackgroundColor',[1 1 1],...
+    'LineWidth',3,...
+    'HeadWidth',25,...
+    'FontWeight','bold',...
+    'FontSize',18,...
+    'FontName','Helvetica Neue');
+annotation(gcf,'textarrow',[0.875555555555556 0.857777777777778],...
+    [0.253974484789008 0.289804444303181],'Color',[1 0 0],'TextColor',[1 0 0],...
+    'TextBackgroundColor',[1 1 1],...
+    'LineWidth',3,...
+    'HeadWidth',25,...
+    'FontWeight','bold',...
+    'FontSize',18,...
+    'FontName','Helvetica Neue');
+annotation(gcf,'textarrow',[0.888888888888889 0.871111111111111],...
+    [0.194111874386652 0.229941833900825],'Color',[1 0 0],'TextColor',[1 0 0],...
+    'TextBackgroundColor',[1 1 1],...
+    'LineWidth',3,...
+    'HeadWidth',25,...
+    'FontWeight','bold',...
+    'FontSize',18,...
+    'FontName','Helvetica Neue');
+
+
+
+
+print(gcf,'-depsc','-r300','fig16.eps');
