@@ -25,7 +25,7 @@ test_amf_bp_sosvmf_ct_drr_rf.m This script demonstrates the denoising performanc
 
 test_amf_bp_sosvmf_ct_drr_ssp.m This script demonstrates the denoising performance of different methods on 2D SS precursor data.
 
-test_amf_bp_sosvmf_fk_ct_drr_das.m This script demonstrates the denoising perf
+test_amf_bp_sosvmf_fk_ct_drr_das.m This script demonstrates the denoising performance of different methods on DAS data.
 
 
 # References
