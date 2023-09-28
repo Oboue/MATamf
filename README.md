@@ -3,6 +3,9 @@ MATamf is a Matlab package for the advanced median filter (AMF) for improving th
 
 # Description of the testing scripts
 
+The demos folder contains all the testing scripts of MATamf on a variety of seismological datasets, reproducing all figures presented in the paper. The description of each testing
+script can be found below:
+
 test_amf_synlcre.m This script demonstrates the denoising performance on 2D synthetic seismic data containing linear and curved events corrupted by random and strong erratic noise.
 
 test_amf_rs.m This script demonstrates the denoising performance on pre-stack and post-stack 2D real reflection seismic data contaminated by erratic and random noise.
